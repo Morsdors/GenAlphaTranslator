@@ -1,0 +1,183 @@
+body {
+    background: #23272b;
+    color: #f3f3f3;
+    font-family: 'Bricolage Grotesque', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    /* Background images will be set by body classes for switching */
+    transition: background-image 0.5s;
+}
+
+body.genalpha-left {
+    background-image: 
+        linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
+        url('/static/genAlpha girl translate.png'),
+        url('/static/Boomer man translate.png');
+    background-position: left center, right center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 40vh auto, 40vh auto;
+    background-attachment: fixed, fixed;
+}
+body.genalpha-right {
+    background-image: 
+        linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
+        url('/static/Boomer man translate.png'),
+        url('/static/genAlpha girl translate.png');
+    background-position: left center, right center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 40vh auto, 40vh auto;
+    background-attachment: fixed, fixed;
+}
+
+#main-header {
+    width: 100vw;
+    text-align: center;
+    padding: 2.2em 0 1.2em 0;
+    background: transparent;
+}
+#main-header h1 {
+    font-family: 'Bricolage Grotesque', Arial, sans-serif;
+    font-size: 2.7em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 2px 16px #000a;
+}
+.grotesque {
+    font-family: 'Bricolage Grotesque', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+.neon {
+    font-family: 'Tilt Neon', cursive;
+    color: #6cf;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px #6cfb, 0 0 16px #6cfb;
+}
+#main-footer {
+    width: 100vw;
+    text-align: center;
+    padding: 1.2em 0 1.2em 0;
+    background: transparent;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    font-size: 1.1em;
+    color: #b6f7c1;
+    z-index: 10;
+    text-shadow: 0 2px 8px #000a;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    gap: 2vw;
+    margin-top: 1em;
+    margin-bottom: 5em;
+}
+.character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 28vw;
+    min-width: 260px;
+    max-width: 400px;
+}
+.character.left {
+    transform: rotate(-3deg);
+}
+.character.right {
+    transform: rotate(3deg);
+}
+/* Remove character images from the main UI, since they're now in the background */
+.character img {
+    display: none;
+}
+.input-box, .output-box {
+    width: 100%;
+    min-height: 120px;
+    background: #2c2f34;
+    color: #f3f3f3;
+    border: none;
+    border-radius: 1em;
+    padding: 1em;
+    font-size: 1.1em;
+    resize: none;
+    box-shadow: 0 2px 12px #1116;
+    margin-bottom: 0.5em;
+}
+.input-box:focus {
+    outline: 2px solid #6cf;
+}
+.output-box {
+    background: #23272b;
+    color: #b6f7c1;
+    font-weight: 500;
+}
+.switcher {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    margin: 0 2vw;
+}
+#switchBtn {
+    background: #353a40;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 1.7em;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+#switchBtn:hover {
+    background: #6cf;
+    color: #23272b;
+}
+#languageSelect {
+    background: #353a40;
+    color: #fff;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+#translateBtn {
+    background: #6cf;
+    color: #23272b;
+    border: none;
+    border-radius: 0.7em;
+    padding: 0.7em 1.5em;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #1114;
+    transition: background 0.2s;
+}
+#translateBtn:hover {
+    background: #4ad;
+}
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        gap: 1.5em;
+        height: auto;
+        padding: 2em 0;
+    }
+    .character {
+        width: 90vw;
+        max-width: 98vw;
+    }
+    .switcher {
+        flex-direction: row;
+        gap: 1em;
+        margin: 1em 0;
+    }
+} 
