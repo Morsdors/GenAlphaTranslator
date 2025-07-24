@@ -77,6 +77,12 @@ translateBtn.addEventListener('click', async () => {
     }
 });
 
+inputBox.addEventListener('input', () => {
+    if (inputBox.value.trim() === '') {
+        outputBox.value = '';
+    }
+});
+
 // Initial setup
 updateBackground();
 updateDirection(); 

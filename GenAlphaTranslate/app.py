@@ -9,6 +9,7 @@ app = Flask(__name__)
 # OPENROUTER_API_KEY = "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"
 import os
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+# OPENROUTER_API_KEY = "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"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "qwen/qwen3-235b-a22b-07-25:free"
 
@@ -33,7 +34,7 @@ def translate():
     prompt = PROMPT_TEMPLATES.get((direction, language), PROMPT_TEMPLATES[("en2genalpha", "en")]).format(text=text)
 
     headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}", 
         "Content-Type": "application/json",
     }
     payload = {
