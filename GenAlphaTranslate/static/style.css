@@ -9,24 +9,37 @@ body {
 }
 
 body.genalpha-left {
-    background-image: 
+    /* background-image: 
         linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
         url('/static/genAlpha girl translate.png'),
-        url('/static/Boomer man translate.png');
+        url('/static/Boomer man translate.png'); */
+    background-image: 
+        url('/static/dziadzio2.png'),
+        url('/static/kiddo.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
     background-attachment: fixed, fixed;
 }
 body.genalpha-right {
-    background-image: 
+    /* background-image: 
         linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
         url('/static/Boomer man translate.png'),
-        url('/static/genAlpha girl translate.png');
+        url('/static/genAlpha girl translate.png'); */
+    background-image: url('/static/kiddo.png'), url('/static/dziadzio2.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
     background-attachment: fixed, fixed;
+    /* Flip both images horizontally */
+    transform: scaleX(-1);
+}
+
+/* Flip the content back so text and UI are not mirrored */
+body.genalpha-right .container,
+body.genalpha-right #main-header,
+body.genalpha-right #main-footer {
+    transform: scaleX(-1);
 }
 
 #main-header {
