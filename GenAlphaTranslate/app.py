@@ -4,8 +4,11 @@ import os
 
 app = Flask(__name__)
 
+
 # Load API key from environment variable or hardcode for demo (not recommended for production)
-OPENROUTER_API_KEY = "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"
+# OPENROUTER_API_KEY = "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"
+import os
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "qwen/qwen3-235b-a22b-07-25:free"
 
