@@ -1,4 +1,5 @@
 let direction = 'en2genalpha'; // or 'genalpha2en', 'pl2genalpha', 'genalpha2pl'
+let isTranslating = false;
 
 const inputBox = document.getElementById('inputText');
 const outputBox = document.getElementById('outputText');
@@ -16,6 +17,15 @@ function showToast(message) {
 	setTimeout(() => {
 		toastEl.classList.remove('show');
 	}, 4000);
+}
+
+function setLoadingState(loading) {
+    isTranslating = loading;
+    translateBtn.disabled = loading;
+    translateBtn.textContent = loading ? 'Translating...' : 'Translate';
+    if (loading) {
+        outputBox.value = 'Translating...';
+    }
 }
 
 function updateBackground() {
@@ -64,13 +74,34 @@ languageSelect.addEventListener('change', () => {
 translateBtn.addEventListener('click', async () => {
     const lang = languageSelect.value;
     const text = leftChar.querySelector('textarea').value;
-    outputBox.value = 'Translating...';
+    
+    if (isTranslating) {
+        showToast('Already translating. Please wait for the current request to complete.');
+        return;
+    }
+
+    setLoadingState(true);
+    
+    // Add timeout for the request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
     try {
         const res = await fetch('/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, direction, language: lang })
+            body: JSON.stringify({ text, direction, language: lang }),
+            signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) {
+            const errorText = await res.text();
+            outputBox.value = `Server error (${res.status}): ${errorText}`;
+            return;
+        }
+        
         const data = await res.json();
         if (data.translation) {
             outputBox.value = data.translation;
@@ -86,7 +117,16 @@ translateBtn.addEventListener('click', async () => {
             outputBox.value = 'Error: ' + (data.error || 'Unknown error');
         }
     } catch (e) {
-        outputBox.value = 'Error: ' + e.message;
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') {
+            outputBox.value = 'Request timed out. Please try again.';
+        } else if (e.message.includes('Failed to fetch')) {
+            outputBox.value = 'Network error. Check your connection and try again.';
+        } else {
+            outputBox.value = 'Error: ' + e.message;
+        }
+    } finally {
+        setLoadingState(false);
     }
 });
 
