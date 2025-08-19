@@ -16,10 +16,10 @@ MODEL = "z-ai/glm-4.5-air:free"
 
 # Helper: Build prompt based on direction/language
 PROMPT_TEMPLATES = {
-    ("en2genalpha", "en"): "Translate the following text into GenAlpha slang: {text}",
-    ("genalpha2en", "en"): "Translate the following GenAlpha slang into standard English: {text}",
-    ("pl2genalpha", "pl"): "Translate the following Polish text into GenAlpha slang (in Polish): {text}",
-    ("genalpha2pl", "pl"): "Translate the following GenAlpha slang (in Polish) into standard Polish: {text}",
+    ("en2genalpha", "en"): "Translate the following text into GenAlpha slang, skip any intro just print the translation as if you were a person speaking, keep it similar/same lenght of sentences as the given text: {text}",
+    ("genalpha2en", "en"): "Translate the following GenAlpha slang into standard English, skip any intro just print the translation as if you were a person speaking. keep it similar/same lenght of sentences as the given text: {text}",
+    ("pl2genalpha", "pl"): "Translate the following Polish text into GenAlpha slang (in Polish), skip any intro just print the translation as if you were a person speaking, keep it similar/same lenght of sentences as the given text: {text}",
+    ("genalpha2pl", "pl"): "Translate the following GenAlpha slang (in Polish) into standard Polish, skip any intro just print the translation as if you were a person speaking, keep it similar/same lenght of sentences as the given text: {text}",
 }
 
 @app.route("/")
