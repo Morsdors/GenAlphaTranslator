@@ -9,37 +9,22 @@ body {
 }
 
 body.genalpha-left {
-    /* background-image: 
-        linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
-        url('/static/genAlpha girl translate.png'),
-        url('/static/Boomer man translate.png'); */
     background-image: 
-        url('/static/dziadzio2.png'),
-        url('/static/kiddo.png');
+        url('/static/genAlpha girl translate.png'),
+        url('/static/Boomer man translate.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
     background-attachment: fixed, fixed;
 }
 body.genalpha-right {
-    /* background-image: 
-        linear-gradient(rgba(35,39,43,0.85), rgba(35,39,43,0.85)),
+    background-image: 
         url('/static/Boomer man translate.png'),
-        url('/static/genAlpha girl translate.png'); */
-    background-image: url('/static/kiddo.png'), url('/static/dziadzio2.png');
+        url('/static/genAlpha girl translate.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
     background-attachment: fixed, fixed;
-    /* Flip both images horizontally */
-    transform: scaleX(-1);
-}
-
-/* Flip the content back so text and UI are not mirrored */
-body.genalpha-right .container,
-body.genalpha-right #main-header,
-body.genalpha-right #main-footer {
-    transform: scaleX(-1);
 }
 
 #main-header {
@@ -177,6 +162,30 @@ body.genalpha-right #main-footer {
 #translateBtn:hover {
     background: #4ad;
 }
+
+/* Toast notification */
+#toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    max-width: 320px;
+    background: #353a40;
+    color: #f8fafc;
+    padding: 12px 14px;
+    border-radius: 10px;
+    box-shadow: 0 6px 24px #0008;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    z-index: 9999;
+    pointer-events: none;
+    font-size: 0.95em;
+}
+#toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (max-width: 900px) {
     .container {
         flex-direction: column;

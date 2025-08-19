@@ -7,6 +7,16 @@ const languageSelect = document.getElementById('languageSelect');
 const translateBtn = document.getElementById('translateBtn');
 const leftChar = document.querySelector('.character.left');
 const rightChar = document.querySelector('.character.right');
+const toastEl = document.getElementById('toast');
+
+function showToast(message) {
+	if (!toastEl) return;
+	toastEl.textContent = message;
+	toastEl.classList.add('show');
+	setTimeout(() => {
+		toastEl.classList.remove('show');
+	}, 4000);
+}
 
 function updateBackground() {
     // GenAlpha girl should always be next to GenAlpha text box
@@ -53,12 +63,7 @@ languageSelect.addEventListener('change', () => {
 
 translateBtn.addEventListener('click', async () => {
     const lang = languageSelect.value;
-    let text, output;
-    if (direction.startsWith('genalpha')) {
-        text = leftChar.querySelector('textarea').value;
-    } else {
-        text = leftChar.querySelector('textarea').value;
-    }
+    const text = leftChar.querySelector('textarea').value;
     outputBox.value = 'Translating...';
     try {
         const res = await fetch('/translate', {
@@ -69,6 +74,10 @@ translateBtn.addEventListener('click', async () => {
         const data = await res.json();
         if (data.translation) {
             outputBox.value = data.translation;
+            const defaultModel = 'qwen/qwen3-coder:free';
+            if (data.model && data.model !== defaultModel) {
+                showToast(`For technical reasons this prompt used: ${data.model}`);
+            }
         } else {
             outputBox.value = 'Error: ' + (data.error || 'Unknown error');
         }
