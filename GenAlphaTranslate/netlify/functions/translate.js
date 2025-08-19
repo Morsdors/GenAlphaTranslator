@@ -22,11 +22,11 @@ exports.handler = async (event) => {
 		}
 
 		const MODELS = [
-				"qwen/qwen3-coder:free",
-				"moonshotai/kimi-k2:free",
-				"z-ai/glm-4.5-air:free",
-				"google/gemma-3n-e2b-it:free",
-			]
+			"qwen/qwen3-coder:free",
+			// "moonshotai/kimi-k2:free",
+			// "z-ai/glm-4.5-air:free",
+			// "google/gemma-3n-e2b-it:free",
+		];
 
 		async function callModel(modelName) {
 			const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -45,6 +45,32 @@ exports.handler = async (event) => {
 			return resp;
 		}
 
+		async function discoverFreeModels() {
+			try {
+				const resp = await fetch('https://openrouter.ai/api/v1/models', {
+					headers: {
+						'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				
+				if (!resp.ok) {
+					return [];
+				}
+				
+				const data = await resp.json();
+				const freeModels = data.data
+					?.filter(model => model.id.includes(':free'))
+					?.map(model => model.id)
+					?.slice(0, 5) || []; // Limit to 5 models
+					
+				return freeModels;
+			} catch (e) {
+				return [];
+			}
+		}
+
+		// Try fallback models first
 		for (let i = 0; i < MODELS.length; i++) {
 			const model = MODELS[i];
 			try {
@@ -65,6 +91,28 @@ exports.handler = async (event) => {
 					if (i < MODELS.length - 1) {
 						await new Promise(r => setTimeout(r, 250));
 						continue;
+					}
+					// All fallback models failed, try to discover new ones
+					const discoveredModels = await discoverFreeModels();
+					if (discoveredModels.length > 0) {
+						// Try discovered models
+						for (const discoveredModel of discoveredModels) {
+							try {
+								const resp = await callModel(discoveredModel);
+								if (resp.ok) {
+									const json = await resp.json();
+									const translation = json.choices?.[0]?.message?.content || '';
+									return {
+										statusCode: 200,
+										headers: { 'Content-Type': 'application/json' },
+										body: JSON.stringify({ translation, model: discoveredModel, discovered: true })
+									};
+								}
+								await new Promise(r => setTimeout(r, 250));
+							} catch (e) {
+								continue;
+							}
+						}
 					}
 					return { statusCode: status, body: JSON.stringify({ error: `Upstream error after fallbacks: ${textBody}` }) };
 				}

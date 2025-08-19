@@ -76,7 +76,11 @@ translateBtn.addEventListener('click', async () => {
             outputBox.value = data.translation;
             const defaultModel = 'qwen/qwen3-coder:free';
             if (data.model && data.model !== defaultModel) {
-                showToast(`For technical reasons this prompt used: ${data.model}`);
+                if (data.discovered) {
+                    showToast(`Scraped for available models. Using: ${data.model}`);
+                } else {
+                    showToast(`For technical reasons this prompt used: ${data.model}`);
+                }
             }
         } else {
             outputBox.value = 'Error: ' + (data.error || 'Unknown error');
@@ -89,6 +93,13 @@ translateBtn.addEventListener('click', async () => {
 inputBox.addEventListener('input', () => {
     if (inputBox.value.trim() === '') {
         outputBox.value = '';
+    }
+});
+
+inputBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.ctrlKey) {
+        e.preventDefault();
+        translateBtn.click();
     }
 });
 
