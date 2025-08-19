@@ -23,10 +23,9 @@ exports.handler = async (event) => {
 
 		const MODELS = [
 			"qwen/qwen3-coder:free",
-			// "moonshotai/kimi-k2:free",
-			// "z-ai/glm-4.5-air:free",
-			// "google/gemma-3n-e2b-it:free",
-		];
+			"moonshotai/kimi-k2:free",
+			"google/gemma-3n-e2b-it:free",
+		]
 
 		async function callModel(modelName) {
 			const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {

@@ -9,9 +9,8 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODELS = [
     "qwen/qwen3-coder:free",
-    # "moonshotai/kimi-k2:free",
-    # "z-ai/glm-4.5-air:free",
-    # "google/gemma-3n-e2b-it:free",
+    "moonshotai/kimi-k2:free",
+    "google/gemma-3n-e2b-it:free",
 ]
 
 # Helper: Build prompt based on direction/language
