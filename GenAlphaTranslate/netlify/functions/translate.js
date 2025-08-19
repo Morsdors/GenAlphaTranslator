@@ -30,7 +30,7 @@ exports.handler = async (event) => {
 				'X-Title': 'GenAlpha Translator'
 			},
 			body: JSON.stringify({
-				model: 'qwen/qwen3-235b-a22b-07-25:free',
+				model: 'qwen/qwen2.5-72b-instruct',
 				messages: [{ role: 'user', content: prompt }]
 			})
 		});
