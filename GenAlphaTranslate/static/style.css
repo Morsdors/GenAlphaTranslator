@@ -10,8 +10,8 @@ body {
 
 body.genalpha-left {
     background-image: 
-        url('/static/genAlpha girl translate.png'),
-        url('/static/Boomer man translate.png');
+        url('/static/dziadzio2.png'),
+        url('/static/kiddo.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
@@ -19,8 +19,8 @@ body.genalpha-left {
 }
 body.genalpha-right {
     background-image: 
-        url('/static/Boomer man translate.png'),
-        url('/static/genAlpha girl translate.png');
+        url('/static/kiddo.png'),
+        url('/static/dziadzio2.png');
     background-position: left center, right center;
     background-repeat: no-repeat, no-repeat;
     background-size: 40vh auto, 40vh auto;
