@@ -16,10 +16,10 @@ MODEL = "z-ai/glm-4.5-air:free"
 
 # Helper: Build prompt based on direction/language
 PROMPT_TEMPLATES = {
-    ("en2genalpha", "en"): "Translate the following text directly into GenAlpha slang, answer with ONLY the translation as if you were a person speaking, keep your answer the same amount of sentences as the given text: {text}",
-    ("genalpha2en", "en"): "Translate the following GenAlpha slang into standard English, answer with ONLY the translation as if you were a person speaking, keep your answer the same amount of sentences as the given text: {text}",
-    ("pl2genalpha", "pl"): "Translate the following Polish text into GenAlpha slang (in Polish), answer with ONLY the translation as if you were a person speaking, keep your answer the same amount of sentences as the given text: {text}",
-    ("genalpha2pl", "pl"): "Translate the following GenAlpha slang (in Polish) into standard Polish, answer with ONLY the translation as if you were a person speaking, keep your answer the same amount of sentences as the given text: {text}",
+    ("en2genalpha", "en"): "Translate the following text directly into GenAlpha slang, answer with ONLY the translation as if you were a person speaking, please don't give me a breakdown of the answer nor any additional intro.  Keep your answer the same amount of sentences as the given text: {text}",
+    ("genalpha2en", "en"): "Translate the following GenAlpha slang into standard English, answer with ONLY the translation as if you were a person speaking, please don't give me a breakdown of the answer nor any additional intro.  Keep your answer the same amount of sentences as the given text: {text}",
+    ("pl2genalpha", "pl"): "Translate the following Polish text into GenAlpha slang (in Polish), answer with ONLY the translation as if you were a person speaking, please don't give me a breakdown of the answer nor any additional intro.  Keep your answer the same amount of sentences as the given text: {text}",
+    ("genalpha2pl", "pl"): "Translate the following GenAlpha slang (in Polish) into standard Polish, answer with ONLY the translation as if you were a person speaking, please don't give me a breakdown of the answer nor any additional intro.  Keep your answer the same amount of sentences as the given text: {text}",
 }
 
 @app.route("/")
