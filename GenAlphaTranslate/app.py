@@ -4,15 +4,15 @@ import os
 
 app = Flask(__name__)
 
-
-# Load API key from environment variable or hardcode for demo (not recommended for production)
-# OPENROUTER_API_KEY = "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"
-import os
+# Load API key from environment variable
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
-# OPENROUTER_API_KEY = "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"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-# OPENROUTER_URL = "https://openrouter.ai/api/v1"
-MODEL = "qwen/qwen3-coder:free" 
+MODELS = [
+    "qwen/qwen3-coder:free",
+    "moonshotai/kimi-k2:free",
+    "z-ai/glm-4.5-air:free",
+    "google/gemma-3n-e2b-it:free",
+]
 
 # Helper: Build prompt based on direction/language
 PROMPT_TEMPLATES = {
@@ -35,23 +35,38 @@ def translate():
     prompt = PROMPT_TEMPLATES.get((direction, language), PROMPT_TEMPLATES[("en2genalpha", "en")]).format(text=text)
 
     headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}", 
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
     }
-    payload = {
-        "model": MODEL,
-        "messages": [
-            {"role": "user", "content": prompt}
-        ]
-    }
-    try:
-        resp = requests.post(OPENROUTER_URL, headers=headers, json=payload)
-        resp.raise_for_status()
-        result = resp.json()
-        translation = result["choices"][0]["message"]["content"]
-        return jsonify({"translation": translation})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+    last_error_text = None
+    last_status = None
+
+    for model in MODELS:
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ]
+        }
+        try:
+            resp = requests.post(OPENROUTER_URL, headers=headers, json=payload, timeout=60)
+            if resp.ok:
+                result = resp.json()
+                translation = result["choices"][0]["message"]["content"]
+                return jsonify({"translation": translation, "model": model})
+            else:
+                last_status = resp.status_code
+                last_error_text = resp.text
+                if last_status == 404 or last_status == 429 or (500 <= last_status < 600):
+                    continue
+                return jsonify({"error": f"Upstream error: {last_error_text}"}), last_status
+        except Exception as e:
+            last_error_text = str(e)
+            last_status = 500
+            continue
+
+    return jsonify({"error": f"Upstream error after fallbacks: {last_error_text or 'unknown'}"}), last_status or 500
 
 if __name__ == "__main__":
     app.run(debug=True) 

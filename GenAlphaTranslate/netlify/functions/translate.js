@@ -21,32 +21,65 @@ exports.handler = async (event) => {
 			return { statusCode: 500, body: JSON.stringify({ error: 'Missing OPENROUTER_API_KEY env var' }) };
 		}
 
-		const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-			method: 'POST',
-			headers: {
-				'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-				'Content-Type': 'application/json',
-				'HTTP-Referer': process.env.SITE_URL || 'https://netlify.app',
-				'X-Title': 'GenAlpha Translator'
-			},
-			body: JSON.stringify({
-				model: 'qwen/qwen3-coder:free',
-				messages: [{ role: 'user', content: prompt }]
-			})
-		});
+		const MODELS = [
+				"qwen/qwen3-coder:free",
+				"moonshotai/kimi-k2:free",
+				"z-ai/glm-4.5-air:free",
+				"google/gemma-3n-e2b-it:free",
+			]
 
-		if (!resp.ok) {
-			const errText = await resp.text();
-			return { statusCode: resp.status, body: JSON.stringify({ error: `Upstream error: ${errText}` }) };
+		async function callModel(modelName) {
+			const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+					'Content-Type': 'application/json',
+					'HTTP-Referer': process.env.SITE_URL || 'https://netlify.app',
+					'X-Title': 'GenAlpha Translator'
+				},
+				body: JSON.stringify({
+					model: modelName,
+					messages: [{ role: 'user', content: prompt }]
+				})
+			});
+			return resp;
 		}
 
-		const json = await resp.json();
-		const translation = json.choices?.[0]?.message?.content || '';
-		return {
-			statusCode: 200,
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ translation })
-		};
+		for (let i = 0; i < MODELS.length; i++) {
+			const model = MODELS[i];
+			try {
+				const resp = await callModel(model);
+				if (resp.ok) {
+					const json = await resp.json();
+					const translation = json.choices?.[0]?.message?.content || '';
+					return {
+						statusCode: 200,
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ translation, model })
+					};
+				}
+				const status = resp.status;
+				const textBody = await resp.text();
+				// On rate limit / not found / provider errors, try next model
+				if (status === 404 || status === 429 || (status >= 500 && status < 600)) {
+					if (i < MODELS.length - 1) {
+						await new Promise(r => setTimeout(r, 250));
+						continue;
+					}
+					return { statusCode: status, body: JSON.stringify({ error: `Upstream error after fallbacks: ${textBody}` }) };
+				}
+				// Other client errors: return immediately
+				return { statusCode: status, body: JSON.stringify({ error: `Upstream error: ${textBody}` }) };
+			} catch (e) {
+				if (i < MODELS.length - 1) {
+					await new Promise(r => setTimeout(r, 250));
+					continue;
+				}
+				return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
+			}
+		}
+
+		return { statusCode: 500, body: JSON.stringify({ error: 'No model succeeded' }) };
 	} catch (e) {
 		return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
 	}
