@@ -85,8 +85,20 @@ exports.handler = async (event) => {
 				}
 				const status = resp.status;
 				const textBody = await resp.text();
+				
+				// Check for specific rate limit error
+				let isRateLimit = status === 429;
+				try {
+					const errorData = JSON.parse(textBody);
+					if (errorData.error?.message?.includes('free-models-per-day')) {
+						isRateLimit = true;
+					}
+				} catch (e) {
+					// If JSON parsing fails, use status code
+				}
+				
 				// On rate limit / not found / provider errors, try next model
-				if (status === 404 || status === 429 || (status >= 500 && status < 600)) {
+				if (status === 404 || isRateLimit || (status >= 500 && status < 600)) {
 					if (i < MODELS.length - 1) {
 						await new Promise(r => setTimeout(r, 250));
 						continue;
