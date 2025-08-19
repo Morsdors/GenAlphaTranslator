@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAlpha Translator</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Google Fonts: Bricolage Grotesque and Tilt Neon -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&family=Tilt+Neon&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="main-header">
+        <h1><span class="grotesque">slay the translation game fr fr 💀✨</span> <span class="neon">(GenAlpha ↺)</span></h1>
+    </header>
+    <div class="container">
+        <div class="character left">
+            <textarea id="inputText" placeholder="Type here..." class="input-box"></textarea>
+        </div>
+        <div class="switcher">
+            <button id="switchBtn" title="Switch direction">⇄</button>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="pl">Polish</option>
+            </select>
+            <button id="translateBtn">Translate</button>
+        </div>
+        <div class="character right">
+            <textarea id="outputText" placeholder="Translation..." class="output-box" readonly></textarea>
+        </div>
+    </div>
+    <footer id="main-footer">
+        <p>Created by <span class="neon">Dorota Solarska</span> with Cursor and <span class="grotesque">Qwen 3 235B LLM via OpenRouter</span></p>
+    </footer>
+    <script src="/static/script.js"></script>
+</body>
+</html> 

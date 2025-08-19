@@ -10,8 +10,8 @@ app = Flask(__name__)
 import os
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 # OPENROUTER_API_KEY = "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"
-OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-# OPENROUTER_URL = "https://openrouter.ai/api/v1"
+# OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_URL = "https://openrouter.ai/api/v1"
 MODEL = "qwen/qwen3-coder:free" 
 
 # Helper: Build prompt based on direction/language
